@@ -1,6 +1,5 @@
-# Docker::Api::Testing
-
-TODO: Write a gem description
+# Docker::Testing
+[![Build Status](https://travis-ci.org/mdouchement/docker-api-testing.svg&branch=master)](https://travis-ci.org/mdouchement/docker-api-testing)
 
 ## Installation
 
