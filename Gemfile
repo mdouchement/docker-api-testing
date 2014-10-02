@@ -4,5 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development, :test do
-  gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
+  gem 'jazz_hands', github: 'nixme/jazz_hands',
+                    branch: 'bring-your-own-debugger',
+                    platform: :ruby_20
 end

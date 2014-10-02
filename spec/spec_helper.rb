@@ -2,8 +2,10 @@
 require 'codeclimate-test-reporter'
 CodeClimate::TestReporter.start
 
-require 'rspec'
 require 'simplecov'
+SimpleCov.start
+
+require 'rspec'
 require 'docker'
 require 'docker/testing'
 require 'spec_utils/stdout'
