@@ -1,5 +1,5 @@
 # Docker::Testing
-[![Build Status](https://travis-ci.org/mdouchement/docker-api-testing.svg&branch=master)](https://travis-ci.org/mdouchement/docker-api-testing)
+[![Build Status](https://travis-ci.org/mdouchement/docker-api-testing.svg?branch=master)](https://travis-ci.org/mdouchement/docker-api-testing)
 [![Code Climate](https://codeclimate.com/github/mdouchement/docker-api-testing/badges/gpa.svg)](https://codeclimate.com/github/mdouchement/docker-api-testing)
 [![Test Coverage](https://codeclimate.com/github/mdouchement/docker-api-testing/badges/coverage.svg)](https://codeclimate.com/github/mdouchement/docker-api-testing)
 
