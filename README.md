@@ -3,6 +3,10 @@
 [![Code Climate](https://codeclimate.com/github/mdouchement/docker-api-testing/badges/gpa.svg)](https://codeclimate.com/github/mdouchement/docker-api-testing)
 [![Test Coverage](https://codeclimate.com/github/mdouchement/docker-api-testing/badges/coverage.svg)](https://codeclimate.com/github/mdouchement/docker-api-testing)
 
+
+This gem aims to provide a few options for testing your [docker-api](https://github.com/swipely/docker-api) integration.
+
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -21,7 +25,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'docker/testing'
+
+Docker::Testing.fake! # default mode
+Docker::Testing.disable!
+```
+
+## Actions
+- Image: not supported
+- Container:
+ - Most of features are supported, but without advanced functionalities
+ - `logs`, `changes`, `export`, `attach` are not supported
 
 ## Contributing
 

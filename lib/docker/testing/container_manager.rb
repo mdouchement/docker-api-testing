@@ -173,7 +173,7 @@ module Docker
       end
 
       # export container
-      def get_changes_with_id(*args)
+      def get_export_with_id(*args)
         fail 'Unsupported'
       end
 
