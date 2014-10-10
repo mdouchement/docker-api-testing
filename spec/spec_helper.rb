@@ -5,10 +5,14 @@ CodeClimate::TestReporter.start
 require 'simplecov'
 SimpleCov.start
 
+require 'coveralls'
+Coveralls.wear!
+
 require 'rspec'
 require 'docker'
 require 'docker/testing'
-require 'spec_utils/stdout'
+require 'support/stdout'
+require 'support/hash'
 
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true

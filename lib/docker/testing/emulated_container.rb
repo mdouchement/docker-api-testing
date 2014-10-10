@@ -54,9 +54,11 @@ module Docker
         @template['HostConfig'].merge!(host_config)
       end
 
+      # rubocop:disable FormatString
       def inspect
-        "#<#{ self.class }:0x00%08x>".format(object_id * 2)
+        "#<#{ self.class }:0x00%08x>" % (object_id * 2)
       end
+      # rubocop:enable FormatString
 
       # Define all port bindings
       def define_pulic_ports(port_bindings = {})
