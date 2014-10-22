@@ -12,7 +12,7 @@ Rubocop::RakeTask.new(:rubocop)
 task default: :rspec
 
 task :console do
-  exec 'bundle exec pry -r kml_data_connector -I ./lib'
+  exec 'bundle exec pry -r docker/testing -I ./lib'
 end
 
 task :release do

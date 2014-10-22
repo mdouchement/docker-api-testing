@@ -12,8 +12,8 @@ module Docker
         else
           # remove: DELETE /containers/#{self.id}
           # all: GET /containers/json
-          if http_method == :delete && (id = path.match(/\/containers\/(.*)/))
-            post_remove(id[1])
+          if http_method == :delete && (id = path.match(%r{/containers/(.*)}))
+            delete(id[1])
           else
             send("#{ http_method }_#{ splits.last }".downcase, path, query, opts)
           end
@@ -31,14 +31,14 @@ module Docker
       end
 
       # create container
-      def post_create(path, query, opts)
+      def post_create(_, query, opts)
         id = SecureRandom.hex(32)
         containers["#{ id[0..12] }"] = EmulatedContainer.new(id, query, opts)
         response(id)
       end
 
       # start container
-      def post_start_with_id(id, query, opts)
+      def post_start_with_id(id, _, opts)
         if stoped_containers[id]
           containers[id] = stoped_containers.delete(id)
           containers[id].state('FinishedAt' => '0001-01-01T00:00:00Z')
@@ -55,7 +55,7 @@ module Docker
       end
 
       # stop container
-      def post_stop_with_id(id, query, opts)
+      def post_stop_with_id(id, _, opts)
         return response(id) unless containers[id]
 
         containers[id].tap do |container|
@@ -76,15 +76,14 @@ module Docker
         if stoped_containers[id]
           post_start_with_id(id, query, opts)
         else
-          raise Error::NotFoundError,
-                'Expected(200..204) <=> Actual(404 Not Found) (Docker::Error::NotFoundError)'
+          fail Error::NotFoundError.new('Expected(200..204) <=> Actual(404 Not Found)')
         end
 
         response(id)
       end
 
       # container top (basic result)
-      def get_top_with_id(id, query, opts)
+      def get_top_with_id(id, _, _)
         container = containers[id]
 
         {
@@ -97,7 +96,7 @@ module Docker
       end
 
       # pause container
-      def post_pause_with_id(id, query, opts)
+      def post_pause_with_id(id, _, _)
         containers[id].tap do |container|
           container.state('Paused' => true)
         end
@@ -106,7 +105,7 @@ module Docker
       end
 
       # unpause container
-      def post_unpause_with_id(id, query, opts)
+      def post_unpause_with_id(id, _, _)
         containers[id].tap do |container|
           container.state('Paused' => false)
         end
@@ -115,7 +114,7 @@ module Docker
       end
 
       # kill container
-      def post_kill_with_id(id, query, opts)
+      def post_kill_with_id(id, _, opts)
         containers[id].tap do |container|
           container.host_config(opts[:body])
           container.state('ExitCode' => -1, 'FinishedAt' => Testing.time_now, 'Running' => false)
@@ -125,18 +124,19 @@ module Docker
       end
 
       # get container
-      def get_json_with_id(id, query, opts)
+      def get_json_with_id(id, _, _)
         if containers.key?(id)
           containers[id].template
         elsif stoped_containers.key?(id)
           stoped_containers[id].template
         else
-          # when removed
+          fail Docker::Error::NotFoundError.new('Expected([200, 201, 202, 203, 204, 304]) ' \
+                                                '<=> Actual(404 Not Found)')
         end
       end
 
       # get all containers
-      def get_json(*args)
+      def get_json(*_)
         containers.values.map do |container|
           tpt = container.template
 
@@ -153,47 +153,46 @@ module Docker
       end
 
       # wait container
-      def get_wait_with_id(*args)
+      def get_wait_with_id(*_)
         { 'StatusCode' => 0 }
       end
 
       # container's logs
-      def get_logs_with_id(*args)
+      def get_logs_with_id(*_)
         fail 'Unsupported'
       end
 
       # container's changes
-      def get_changes_with_id(*args)
+      def get_changes_with_id(*_)
         fail 'Unsupported'
       end
 
       # container's changes
-      def get_copy_with_id(*args)
+      def get_copy_with_id(*_)
         fail 'Unsupported'
       end
 
       # export container
-      def get_export_with_id(*args)
+      def get_export_with_id(*_)
         fail 'Unsupported'
       end
 
       # attach container
-      def get_attach_with_id(*args)
+      def get_attach_with_id(*_)
         fail 'Unsupported'
       end
 
       # remove container
-      def post_remove(id)
+      def delete(id)
         short_id = id[0..12]
 
         if containers.key?(short_id)
-          fail NotAcceptable,
-                'Expected(200..204) <=> Actual(406 Not Acceptable) (Excon::Errors::NotAcceptable)'
+          fail ::Excon::Errors::NotAcceptable.new('Expected(200..204) ' \
+                                                  '<=> Actual(406 Not Acceptable)')
         end
 
         unless stoped_containers.key?(short_id)
-          fail NotFoundError,
-                'Expected(200..204) <=> Actual(404 Not Found) (Docker::Error::NotFoundError)'
+          fail Docker::Error::NotFoundError.new('Expected(200..204) <=> Actual(404 Not Found)')
         end
 
         stoped_containers.delete(short_id)
