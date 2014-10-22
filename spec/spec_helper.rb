@@ -13,6 +13,7 @@ require 'docker'
 require 'docker/testing'
 require 'support/stdout'
 require 'support/hash'
+require 'support/shared_stuff/shared_container'
 
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
