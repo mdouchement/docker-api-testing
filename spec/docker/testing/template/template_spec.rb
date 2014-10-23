@@ -51,7 +51,7 @@ module Docker::Testing::Container
         'HostsPath' => '',
         'Image' => 'ba5877dc9beca5a0af9521846e79419e98575a11cbfe1ff2ad2e95302cff26bf',
         'MountLabel'  => '',
-        'Name' => '',
+        'Name' => 'focused_torvalds',
         'NetworkSettings' => {
           'Bridge' => 'docker0',
           'Gateway' => '172.17.42.1',

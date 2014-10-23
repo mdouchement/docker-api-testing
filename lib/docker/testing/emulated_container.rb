@@ -105,7 +105,7 @@ module Docker
       private
 
       def at_create_time(query, body)
-        @template['Name'] = "/#{ query['name'].gsub(/[^a-zA-Z0-9_.-]/, '') }"
+        @template['Name'] = "/#{ query['name'].gsub(/[^a-zA-Z0-9_.-]/, '') }" if query['name']
 
         @template['Path'] = body['Cmd'][0]
         @template['Args'] = body['Cmd'][1..-1]
