@@ -53,6 +53,7 @@ module Docker
         end
         response(id)
       end
+      alias_method :post_attach_with_id, :post_start_with_id
 
       # stop container
       def post_stop_with_id(id, _, opts)
